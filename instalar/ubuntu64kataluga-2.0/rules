@@ -1,0 +1,131 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
+	touch configure-stamp
+
+
+build: build-stamp
+
+build-stamp: configure-stamp  
+	dh_testdir
+	touch build-stamp
+
+clean: 
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp configure-stamp
+	dh_clean 
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_prep  
+	dh_installdirs
+	mkdir -p $(CURDIR)/debian/kataluga
+	mkdir -p $(CURDIR)/debian/kataluga/usr/bin
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/fotos
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/imagenes
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/imagenes/ejercicios
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/imagenes/banderas
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/imagenes/erabilgarri
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/licencias
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/palabras
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/po
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/predeterminados
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/fonemak-es
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/fonemak-eu
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/letrak-es
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/letrak-eu
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/hitzsoinuak-es
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/hitzsoinuak-eu
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/laguntzak-es
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/laguntzak-eu
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/perpausak-es
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/perpausak-eu
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/silabak-es
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/silabak-eu
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/zaratak
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/applications
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/fonts
+	mkdir -p $(CURDIR)/debian/kataluga/usr/share/fonts/katamotz
+
+
+
+	cp palabras/KatamotzIkasi.ttf $(CURDIR)/debian/kataluga/usr/share/fonts/katamotz/
+	cp bin32/* $(CURDIR)/debian/kataluga/usr/bin/
+	cp fotos/* $(CURDIR)/debian/kataluga/usr/share/kataluga/fotos/
+	cp imagenes/*.* $(CURDIR)/debian/kataluga/usr/share/kataluga/imagenes/
+	cp imagenes/ejercicios/* $(CURDIR)/debian/kataluga/usr/share/kataluga/imagenes/ejercicios/
+	cp imagenes/erabilgarri/* $(CURDIR)/debian/kataluga/usr/share/kataluga/imagenes/erabilgarri/
+	cp imagenes/banderas/* $(CURDIR)/debian/kataluga/usr/share/kataluga/imagenes/banderas/
+	cp palabras/* $(CURDIR)/debian/kataluga/usr/share/kataluga/palabras/
+	cp po/* $(CURDIR)/debian/kataluga/usr/share/kataluga/po/
+	cp sonidos/zaratak/* $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/zaratak/
+	cp sonidos/fonemak-es/* $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/fonemak-es/
+	cp sonidos/fonemak-eu/* $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/fonemak-eu/
+	cp sonidos/letrak-es/* $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/letrak-es/
+	cp sonidos/letrak-eu/* $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/letrak-eu/
+	cp sonidos/hitzsoinuak-es/* $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/hitzsoinuak-es/
+	cp sonidos/hitzsoinuak-eu/* $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/hitzsoinuak-eu/
+	cp sonidos/laguntzak-es/* $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/laguntzak-es/
+	cp sonidos/laguntzak-eu/* $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/laguntzak-eu/
+	cp sonidos/perpausak-es/* $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/perpausak-es/
+	cp sonidos/perpausak-eu/* $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/perpausak-eu/
+	cp sonidos/silabak-es/* $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/silabak-es/
+	cp sonidos/silabak-eu/* $(CURDIR)/debian/kataluga/usr/share/kataluga/sonidos/silabak-eu/
+	cp licencias/* $(CURDIR)/debian/kataluga/usr/share/kataluga/licencias/
+	cp predeterminados/* $(CURDIR)/debian/kataluga/usr/share/kataluga/predeterminados/
+	cp "Kataluga.desktop" $(CURDIR)/debian/kataluga/usr/share/applications/
+	
+
+# Build architecture-independent files here.
+binary-indep: install
+
+# We have nothing to do by default.
+# Build architecture-dependent files here.
+binary-arch: install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs 
+	dh_installdocs
+	dh_installexamples
+#	dh_install
+#	dh_installmenu
+#	dh_installdebconf
+#	dh_installlogrotate
+#	dh_installemacsen
+#	dh_installpam
+#	dh_installmime
+#	dh_python
+#	dh_installinit
+#	dh_installcron
+#	dh_installinfo
+	dh_installman
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+#	dh_perl
+#	dh_makeshlibs
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure

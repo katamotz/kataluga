@@ -1,0 +1,27 @@
+00/Gizon hori surfa egiten ari da.E/Kamarari agurtzen ari da.G/Olatua txikia da.G/Horiz eta beltzez jantzita dago.E
+01/20 pertsona baino gehiago daude bilduta.E/Emakume bat sukaldatzen ari da.G/Aulkietan eserita daude.G/Argazkilari bat argazkiak ateratzen ari da.E
+02/Trenak 5 bagoi ditu.G/Argazkia txuri beltzean da.E/Tren elektrikoa zubiaren gainetik pasatzen ari da.G/Makinariak trenaren kanpoaldean daude.E
+03/Pertsona hau ilargian dago.E/Astronauta horia da.G/Buruko kapsulan argia ikusten da.E/Astronauta hondartzan dago.G
+04/Astronauta hau espazioan dago.E/Planeta urdinari Lurra planeta deitzen zaio.E/Astronautak bideokamara bat darama.E/Extralurtarra lurraren gainean flotatzen du.G
+05/Itsasontzi hau arrantzarako da.E/Itsasontzi urdina da.E/Itsasontzia itsas zabalean nabigatzen ari da.G/Itsasontziko arrantzaleak arrainak jasotzen ari dira.G
+06/Autobus honek bi solairu ditu.E/"Victoria" jartzen duen kartel bat dauka.E/Autobusaren matrikula beltza da.E/Autobusa belarretan aparkatuta dago.E
+07/Toki honetan bero asko egiten du.G/Animalia asko ikusten dira.G/Elurra ari du.G/Guztiz elurtuta dago.E
+08/Behiak mihia atera du.E/Behia hesiaren beste aldean dago.E/Behiaren belarriak zuriak dira.G/Behia marroia da.G
+09/Ume hau ohianean dago.G/Ume hau ondartzan dago.E/Ume honek arrain bat dauka ahoan.E/Arraina umearen ahoan dago.E
+10/Hipopotamo honek gosea dauka.G/Euli bat da.E/Euliak ileak ditu gorputzean.E/Euliaren gorputzak ileak ditu.E
+11/Itsas sumendiaren laba da.E/Laba kolore gorrikoa da.E/Itsasoari kea dario laba bero dagoelako.E/Laba hotz dago.G
+12/Mutiko hau gona batekin posatzen ari da.E/Bere amak uztai bat darama jolasteko.E/Mutikoak uztai bat eta makila bat dauzka.E/Mutikoa marinel jantzita dago.E
+13/Gerlari honek bi ezkutu eta lantza bat dauzka.G/Gerlari honek bi lantza dauzka.E/Gerlari honek egurrezko kasko bat dauka.G/Gerlariaren ezkutuak 8 marrazki ditu.E
+14/Gizon honek sua botatzen du ahotik.E/Atzeko gizonek danborrak jotzen dituzte.E/Gizon honek perladun lepoko bat dauka.E/Sua gizona kiskaltzen ari da.G
+15/Oraindik ez da heldu metroa.E/Pertsonak metroaren zain daude.E/Hormak iragarkiz beterik daude.E/Zorua garbi dago.E
+16/Gaztelu hau harkatiz baten gainean dago.E/Zubi bat zeharkatu behar da gazteluan sartzeko.E/Printzesak dorrean itxaroten dio printzeari.G/Dorrea kolore zuriz margotua dago.E
+17/Ume hauek ikastetxe bateko ikasleak dira.E/Gela hau 12 ikaslek osatzen dute.E/Neskak aspertzen ari dira.G/Ume hauek kolore tristedun arropak janzten dituzte.G
+18/Arrain hau algen artean izkutatzen ari da.E/Algak arrain honetaz izkutatzen ari dira.G/Arrainak marra zuriak ditu.E/Arrain hau zuri, laranja eta beltz kolorekoa da.E
+19/Eliza honek dorre karratu bat dauka.E/Eliza jendez inguratuta dago.G/Eliza zuhaitzez inguratuta dago.E/Elizako atea zuria da.E
+20/Sugandilak buztana galdu du.G/Sugandilaren azala marroia da.E/Sugandilek gure eskuetan egotea gustoko dute.G/Sugandila pertsona baten eskuan dago.E
+21/Harresi batetik ateratako argazkia da.E/Etxea erortzeko zorian dago.E/Harresian belar asko dago.E/Urrunean herrixka txiki bat ikus daiteke.E
+22/Fatxada honetan bi hontz ikus daitezke.E/Fatxada honetan lau hego ikus daitezke.E/Fatxada honetan bi hegazti ikus ditzakegu.E/Fatxadako arranoak arriz eginak daude.G
+23/Ordenagailu eramangarriaren aurrean bi pertsona daude.E/Argazkian bi ordenagailu ikus daitezke.E/Ordenagailua itzalita dago.G/Ordenagailua piztuta dago.E
+24/Tren hau bidaiarien trena da.G/Tren hau merkantzia trena da.E/Paisaian zuhaitzak daude.E/Paisai elurtua da.E
+25/Autoak gasolindegi batean daude.E/Gasolindegia zuri eta urdin kolorekoa da.E/Gasolindegian euria ari du.G/Zerua guztiz garbi ageri da.G
+26/Hau lurrikara bat da.G/Sumendi bat da.G/Hau tornado bat da.E/Hau laino tximista da.G

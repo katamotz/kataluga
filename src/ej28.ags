@@ -1,0 +1,169 @@
+
+
+
+// Elije la imagen que empieze con la letra
+
+class Ejercicio28:GLib.Object
+	imagen_animales: list of Imagen
+	solucion: list of int
+	lista_ordenada:list of string
+	imagen: Imagen
+	palabra:string
+	palabra_ordenada:string
+	num:int=0
+	x:int=420
+	salir:Imagen
+	corregir:Imagen
+	iman:Rectangulo
+	mireloj : uint
+	tiempo:int
+	bloqueado:bool=false
+	init 
+		
+		lista_ordenada= new list of string
+		imagen_animales= new list of Imagen
+		solucion= new list of int
+	def inicio()
+		// inicializamos tiempo a 20 para que no diga nada. Hablará cuando sea 0 pulsando la imagen "play"
+		tiempo=20
+		// podemos mover las letras, si esta bloqueado no podremos moverlas porque estamos escuchando.
+		bloqueado=false
+		
+		// cargar el escenario: crear el escenario y los bindings de pulsacion.
+		cargar_escenario()
+		
+		// iman es el cuadrado donde se meterán las silabaas
+		iman= new Rectangulo (20,400,800,150)
+		iman.set_colorfondo(amarillo)
+		
+		// en palabra_ordenada guardamos la solucion correcta para que sea comparada
+		var lista_animales= datos.crea_lista_de_animales(3)
+		lista_ordenada.clear()
+		lista_ordenada= copia_lista_str(lista_animales)
+		desordena_lista_string(ref lista_animales)
+		solucion.clear()
+		imagen_animales.clear()
+		
+		var imagen= new Imagen(70,240,directorio_datos+"/imagenes/play.png")
+		imagen.izq_pulsado.connect(on_imagen)
+		imagen.arrastrable=false
+		
+		var x=200
+		for var i=0 to ultimo_de_lista (lista_animales)
+			var et=new Imagen(x,255,directorio_datos+"/fotos/"+lista_animales[i]+".png")
+			imagen_animales.add(et)
+			imagen_animales.last().set_ancho(80)
+			imagen_animales.last().set_alto(80)
+			imagen_animales.last().soltado.connect (on_soltar_imagen)
+			imagen_animales.last().izq_pulsado.connect(on_tomar_imagen)
+			imagen_animales.last().valor_str=lista_animales[i]
+			imagen_animales.last().valor_int=i
+			x+=imagen_animales.last().get_ancho()+2
+		
+		//mostrar explicacion de color blanco
+		var explicacion= new Texto(50,50,Mm(t.t("Ordena las imágenes del modo que las has escuchado.")))
+		explicacion.set_tamanotexto(20)
+		explicacion.set_colorletra(blanco)
+		explicacion.set_fondovisible(false)
+		explicacion.arrastrable=false
+		
+		///creando mandos
+		
+		salir= new Imagen(920,20,directorio_datos+"/imagenes/Terminar.png")
+		salir.set_tamano(50,50)
+		salir.arrastrable=false
+		salir.izq_pulsado.connect(on_salir)
+		
+		corregir=new Imagen(920,100,directorio_datos+"/imagenes/corregir.png")
+		corregir.set_tamano(50,50)
+		corregir.arrastrable=false
+		corregir.izq_pulsado.connect(on_corregir)
+		mireloj = Timeout.add(3000, timer)
+		
+		
+	def on_soltar_imagen(c:Control)
+		if not bloqueado
+			if colision_cuadrada(iman,c)
+				c.valor_bool=true
+				solucion.add(c.valor_int)
+				c.set_posy((iman.get_posy()+iman.get_alto()/2)-(c.get_alto()/2))
+			else
+				c.valor_bool=false
+				if solucion.contains(c.valor_int)
+					solucion.remove_at(solucion.index_of(c.valor_int))
+				
+		organiza_iman()
+		
+	def on_tomar_imagen(c:Control)
+		if bloqueado 
+			c.arrastrable=false
+			print "bloqueado"
+		else
+			c.arrastrable=true
+			sonidos.play("clik")
+			c.valor_bool=false
+			if solucion.contains(c.valor_int)
+				solucion.remove_at(solucion.index_of(c.valor_int))
+			
+		organiza_iman()
+		
+	def organiza_iman()
+		var pos=15+iman.get_posx()
+		for var i=0 to ultimo_de_lista(solucion)
+			if imagen_animales[solucion[i]].valor_bool
+				imagen_animales[solucion[i]].set_posx(pos)
+				pos+=imagen_animales[solucion[i]].get_ancho()+2
+	
+	def organiza_en(x:int,y:int)
+		var posy=y
+		var posx=x
+		for var i=0 to ultimo_de_lista(solucion)
+			imagen_animales[solucion[i]].set_posx(posx)
+			imagen_animales[solucion[i]].set_posy(posy)
+			imagen_animales[solucion[i]].valor_bool=false // quiere decir que no estan colocados en el iman
+			posx+=(int)imagen_animales[solucion[i]].get_ancho()+2
+			
+
+		
+	def on_salir(c:Control)
+		Source.remove (mireloj)
+		controles.clear()
+		menu_principal.inicio()
+		
+	def on_corregir()
+		var ondo=true
+		for var i=0 to ultimo_de_lista(solucion)
+			if lista_ordenada[i]!=imagen_animales[solucion[i]].valor_str
+				ondo=false
+		if tamano_de_lista(solucion)!=tamano_de_lista(imagen_animales) do ondo=false
+		if not ondo 
+			sonidos.play("gaizki")
+			datos.guardar_informe ("Mal "+" ---- "+fecha_str+" ---- Ejercicio: "+nomejer[ejercicio]+ " ---- Solución: "+lista_ordenada[0]+" "+lista_ordenada[1]+" "+lista_ordenada[2]+" "+lista_ordenada[3]+ " ----- Respuesta:"+imagen_animales[solucion[0]].valor_str+" "+imagen_animales[solucion[1]].valor_str+" "+imagen_animales[solucion[2]].valor_str+" "+imagen_animales[solucion[3]].valor_str)
+			organiza_en(200,255)
+		else
+			sonidos.play("ondo")
+			datos.guardar_informe ("Bien"+" ---- "+fecha_str+" ---- Ejercicio: "+nomejer[ejercicio]+ " ---- Solución: "+lista_ordenada[0]+" "+lista_ordenada[1]+" "+lista_ordenada[2]+" "+lista_ordenada[3]+ " ----- Respuesta:"+imagen_animales[solucion[0]].valor_str+" "+imagen_animales[solucion[1]].valor_str+" "+imagen_animales[solucion[2]].valor_str+" "+imagen_animales[solucion[3]].valor_str)
+			Source.remove (mireloj)
+			controles.clear()
+			if not automatico
+				this.inicio()
+			else
+				continuando()
+		
+	
+	def on_imagen(c:Control) // play para escuchar
+		tiempo=0
+		bloqueado=true
+		
+	def timer():bool
+		if tiempo<=ultimo_de_lista(lista_ordenada)
+			sonidos.play("archivo",directorio_datos+"/sonidos/sonido_animal/"+lista_ordenada[tiempo]+".ogg")
+		else
+			bloqueado=false
+		tiempo+=1
+		
+		return true
+	
+	def cargar_escenario()
+		controles.clear()
+	

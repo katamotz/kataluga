@@ -1,0 +1,12 @@
+Source: kataluga
+Section: Education
+Priority: extra
+Maintainer: Gontzal <txasatonga@yahoo.es>
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.8.1
+Homepage: <www.katamotzlectura.blogspot.com>
+
+Package: kataluga
+Architecture: i386
+Depends: libglib2.0-0, libgtk-3-0, libpango-1.0-0, libgee-0.8-2, libsdl-mixer1.2, libsdl1.2debian
+Description: Ejercicios para tratar la dislexia y otras dificultades de lectura.

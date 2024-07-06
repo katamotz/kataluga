@@ -1,0 +1,13 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Kataluga
+Icon=/usr/share/kataluga/imagenes/maestra.png
+Comment=Irakurtzeko eta idazteko zailtasunak tratatzeko joku eta ariketa sorta da.
+Exec=/usr/bin/kataluga
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Education;
+StartupNotify=False
+Name[eu]=Kataluga
+Name[eu_ES]=Kataluga

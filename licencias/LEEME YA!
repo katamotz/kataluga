@@ -1,0 +1,29 @@
+						Katamotz Ejercicios
+						###################
+Objetivo
+________
+
+
+	Katamotz Ejercicios es un programa realizado en Python 2.7 dirigido al tratamiento de dislexia y otros 
+problemas de aprendizaje de la lectura y la escritura. 
+
+	Cuando empieza el programa el niño puede crear una cuenta propia con su nombre y una contraseña. El programa crea automáticamente un archivo donde se almacenarán las dificultades del alumno. Si se quisieran localizar estos archivos seguramente se encuentren en "/usr/bin/katamotzEjercicios/Alumnos" o "/usr/share/KatamotzEjercicios/Alumnos". 
+
+	Katamotz Ejercicios cuenta con una "Hoja de dificultades" accesible desde el menu en la cual se pueden introducir las dificultades que cada alumno tiene y dependiendo de la capacidad de trabajo que posea se pueden calibrar la cantidad de puntos que se obtienen o el máximo de puntos que puede obtener. 
+
+	El programa cuenta actualmente con más de 40 ejercicios. Algunos temas estan escasos de ejercicios y espero que más programadores se anime a aportar cambios, mejoras y aumentos. Soy novato en la programación Python y seguramente cualquiera que sepa algo de programación podría aportar mucho al programa. Utilizo el programa como complemento en mi labor docente. Este programa no debe considerarse como herramienta o metodo único de enseñanza.
+
+La contraseña del profesor
+__________________________
+
+La contraseña por defecto es "katamotz"
+La contraseña del profesor esta situada simplemente en el mismo directorio donde se encuentra "katamotz-ejercicios.py". 
+
+* Maisu del Euskera, quiere decir Maestro
+
+
+Los Tipos de Ejercicios son los siguientes:
+___________________________________________
+		  
+	0) LETRAS 1) SILABAS 2) PALABRAS 3) FRASES 4) TEXTOS 5) ORTOGRAFÍA 6) INVERSIONES  7) JUEGOS
+

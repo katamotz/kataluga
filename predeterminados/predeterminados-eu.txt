@@ -1,0 +1,4 @@
+001/ 1. Maila / 2-3-4 hizkiko hitzak besterik ez ditu eta denak oso errezak. hizkiak: k, t, m, p, s .Konfigurazioa automatikoa: ariketa errezenekin eratzen da. 
+002/ 2. Maila / 2-3-4 hizkiko hitzak besterik ez ditu eta denak oso errezak. hizkiak: k, t, m, z, d .Konfigurazioa automatikoa: ariketa errezenekin eratzen da. 
+003/ 3. Maila / 2-3-4 hizkiko hitzak besterik ez ditu eta denak oso errezak. hizkiak: m, d, z, p, s  .Konfigurazioa automatikoa: ariketa errezenekin eratzen da. 
+004/ 4. Maila / 2-3-4-5-6 hizkiko hitzak besterik ez ditu eta denak oso errezak. hizkiak: m, t, k, d, z, p, s .Konfigurazioa automatikoa: ariketa errezenekin eratzen da. 

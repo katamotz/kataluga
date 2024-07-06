@@ -1,0 +1,3 @@
+001/ 1er Nivel / Palabras fáciles de 3-4-5 letras . Letras: m,p,s,t,l .Configuración Automática: Se realiza con ejercicios fáciles.
+002/ 2do Nivel / Palabras fáciles de 3-4-5-6 letras . Letras: m,p,t,l,s,r,n, .Configuración Automática: Se realiza con ejercicios fáciles.
+003/ 3er Nivel / Palabras medianas de 3-4-5-6-7-8 letras . Letras: p,s,r,n,b,d .Configuración Automática: Se realiza con ejercicios fáciles.
