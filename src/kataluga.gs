@@ -73,7 +73,7 @@ init
 	// inicializamos el controlador de sonido SDL o Gst
 	//Gst.init (ref args)
 	Gtk.init(ref args)
-	SDLMixer.open(44100,SDL.AudioFormat.S16LSB,2,4096);
+	SDLMixer.open(44100,SDL.Audio.AudioFormat.S16LSB,2,4096);
 	
 	nombre_programa="kataluga-2.0"
 	directorio_datos=GLib.Environment.get_current_dir()+"/.."
