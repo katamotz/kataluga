@@ -1,5 +1,5 @@
 class Fuentes:Gtk.Window 
-	selection:Gtk.FontSelection
+	selection:Gtk.FontChooserWidget 
 	box:Gtk.Box
 	button:Gtk.Button
 	salir:Gtk.Button
@@ -17,7 +17,7 @@ class Fuentes:Gtk.Window
 		this.add (box);
 
 		// The FontSelection:
-		selection= new Gtk.FontSelection ();
+		selection= new Gtk.FontChooserWidget ();
 		box.add (selection);
 
 		// A Button:
@@ -34,7 +34,7 @@ class Fuentes:Gtk.Window
 		
 	def on_clic()
 		// Emitted when a font has been chosen:
-		fuente= selection.get_family ();
+		fuente= selection.get_font_family ();
 		letra=fuente.get_name()
 		print letra
 		
