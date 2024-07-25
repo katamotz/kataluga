@@ -5,12 +5,13 @@ class Config:Window
 	alumno:Gtk.ComboBoxText
 	lista_alumnos:list of string
 	
-	view1: Gtk.TreeView
-	view2: Gtk.TreeView
-	view0: Gtk.TreeView
-	lista_0:Gtk.ListStore
-	lista_1:Gtk.ListStore
-	lista_2:Gtk.ListStore
+	view0: Gtk.TreeView // Letras
+	view1: Gtk.TreeView // Palabras No elegidas
+	view2: Gtk.TreeView // Palabras elegidas
+	
+	lista_0:Gtk.ListStore // lista de Letras
+	lista_1:Gtk.ListStore // lista de palabras no elegidas
+	lista_2:Gtk.ListStore // Lista de palabras elegidas
 	
 	zenb:Entry
 	letras:Entry
@@ -135,32 +136,32 @@ class Config:Window
 		var fix= new Gtk.Fixed()
 		fix.put(alumno,20,0)
 		fix.put(boton_secuencia_ejercicios,200,0)
-		fix.put(boton_predeterminada,400,0)
-		fix.put(boton_usuarios,600,0)
-		//fix.put(boton_idioma,700,0)
-		fix.put(boton_ebaluatu,730,0)
+		fix.put(boton_predeterminada,450,0)
+		fix.put(boton_usuarios,750,0)
+		fix.put(boton_ebaluatu,900,0)
 		fix.put(s0,20,50)
-		fix.put(s1,250,50)
-		fix.put(s2,600,50)
-		fix.put(haut1,420,50)
-		fix.put(haut2,500,50)
-		fix.put(dena1,420,80)
-		fix.put(dena2,500,80)
-		fix.put(zenb1,430,150)
-		fix.put(zenb ,480,150)
-		fix.put(zenb2,530,150)
+		fix.put(s1,265,50)
+		fix.put(s2,700,50)
+		fix.put(haut1,430,50)
+		fix.put(haut2,550,50)
+		fix.put(dena1,430,100)
+		fix.put(dena2,550,100)
+		fix.put(zenb1,450,150)
+		fix.put(zenb ,520,150)
+		fix.put(zenb2,580,150)
 		fix.put(letras,120,50)
-		fix.put(botezab,120,80)
-		fix.put(botiragaz,120,110)
+		fix.put(botezab,120,90)
+		fix.put(botiragaz,120,130)
 		fix.put(gordeirten,300,350)
 		fix.put(gorde,200,350)
-		fix.put(irten,450,350)
+		fix.put(irten,480,350)
 		this.add(fix)
-		this.set_size_request(800,400)
+		this.set_size_request(950,400)
 		//destroy.connect(Gtk.main_quit)
 		this.set_deletable(false)
 		this.hide()
-		
+	
+	
 	def busca_alumnos()
 		lista_alumnos.clear()
 		alumno.remove_all()
@@ -294,7 +295,7 @@ class Config:Window
 		// toma la lista de palabras elegidas y metela en el array palabras
 		if selection.count_selected_rows()>0
 			var item  = selection.get_selected_rows(null).data;
-			print selection.count_selected_rows().to_string()
+			//print selection.count_selected_rows().to_string()
 		
 			for var i=0 to (selection.count_selected_rows()-1)
 				
@@ -309,8 +310,8 @@ class Config:Window
 		
 		
 		// tomamos las letras y lo metemos en el array letras
-		
 		letras:list of string= new list of string
+		
 		var selection0 = view0.get_selection()
 		selection0.set_mode(Gtk.SelectionMode.MULTIPLE)
 		selection0.select_all()
@@ -423,272 +424,237 @@ class Config:Window
 		salir = guardando()
 		// retoma la nueva configuración del alumno para el programa por si acaso a sido modificada.
 		datos.abriendo_archivos_necesarios(datos.alumno_nombre)
-			
 	
+	def compare_strings (a:string, b:string) : int 
+		// Comparar primero por la longitud de las cadenas
+		if (longitud(a) != longitud(b)) 
+			return a.length - b.length;
+		return a.collate(b);
+		
+	def descarga_lista (lista:Gtk.ListStore) : Gee.ArrayList
+		// generamos una lista gee a partir de un view para manipularla sencillamente. La manipulamos fuera y luego la cargamos de nuevo.
+		iter: TreeIter;
+		var milista= new list of string;
+		milista.clear();
+		var valor="";
+		if (lista.get_iter_first (out iter))
+			do
+				lista.get (iter, 0, out valor)
+				milista.add (valor)
+			while lista.iter_next (ref iter)
+		return milista
+	
+	def carga_lista (lista:Gtk.ListStore, listaGee:Gee.ArrayList of string)  
+		// metemos nuestra listaGee en una lista.
+		iter: TreeIter;
+		lista.clear()
+		for i in listaGee
+			lista.append (out iter);
+			lista.set (iter, 0, i);
+	
+	def descarga_seleccionados (view: Gtk.TreeView , lista:Gtk.ListStore) : Gee.ArrayList
+		var selection = view.get_selection();
+		model: TreeModel;
+		//selected_paths : Gtk.TreePath []
+		//path: TreePath
+		var milista= new list of string;
+		var selected_paths = selection.get_selected_rows (out model);
+		
+		if (model == null)
+			return milista;
+
+		// Sort the paths in reverse order to avoid invalidating the paths as we remove rows
+		//selected_paths.sort((a, b) => b.compare(a));
+		iter: TreeIter;
+
+		// Remove rows from the ListStore
+		for path in selected_paths
+			if (lista.get_iter(out iter, path))
+				value:string = "";
+				lista.get(iter, 0, out value);
+				//list_store.remove(ref iter);
+				//print("Moved row value: %s\n", value);
+				milista.add (value)
+		
+		return milista;
+		
+	
+		
+		
 	def on_letras()
+		var lista_letra= new list of string;
 		if letras.get_text()!=""
-			var selection = view0.get_selection()
-			selection.set_mode(Gtk.SelectionMode.MULTIPLE)
-			iter : TreeIter
-			selection.select_all()
-			var badago=false
-			//var permitido=false
-				
-			if selection.count_selected_rows()>0
-		
-				var item  = selection.get_selected_rows(null).data;
-				// revisando que este
-				for var i=0 to (selection.count_selected_rows()-1)
-					var selection2=""
-					// toma iterador y guarda en selection2 su contenido.
-					lista_0.get_iter(out iter, item);
-					lista_0.get(iter, 0, out selection2);
-					if selection2==letras.get_text() do badago=true
-					item.next()
-			if (not badago) and letras_permitidas.contains (letras.get_text()) 
-				lista_0.append (out iter2);
-				lista_0.set (iter2, 0, letras.get_text());
-				letras.set_text("")
-			selection.unselect_all()
-			
-	def on_iragaz()
-		letrasx:list of string= new list of string
-		var selection = view0.get_selection()
-		selection.set_mode(Gtk.SelectionMode.MULTIPLE)
-		iter : TreeIter
-		iter2 : TreeIter
-		selection.select_all()
-		
-		if selection.count_selected_rows()>0
-			var item  = selection.get_selected_rows(null).data;
-			for var i=0 to (selection.count_selected_rows()-1)
-				
-				var selection2=""
-				lista_0.get_iter(out iter, item);
-				lista_0.get(iter, 0, out selection2);
-				letrasx.add(selection2)
-				item.next()
+			lista_letra= descarga_lista (lista_0)
+			if (not lista_letra.contains (letras.get_text()) ) and letras_permitidas.contains (letras.get_text()) 
+				lista_letra.add (letras.get_text())
+				carga_lista (lista_0,lista_letra)
 	
-		selection = view2.get_selection()
-		selection.set_mode(Gtk.SelectionMode.MULTIPLE)
-		selection.select_all()
-		if selection.count_selected_rows()>0
-			var item  = selection.get_selected_rows(null).data;
-			var selection2="";
-			var iteradores = new list of Gtk.TreeIter?
-			for var i=0 to (selection.count_selected_rows()-1)
-				// toma iterador y guarda en selection2 su contenido.
-				lista_2.get_iter(out iter, item);
-				lista_2.get(iter, 0, out selection2);
-				// procedimiento que trata de eliminar las vocales para que queden solo las consonantes, si eliminando todas las consonantes
-				//y también las vocales palabra queda vacía ="" es que la palabra es correcta puesto que contiene solo las letras seleccionadas.   
-				var pal=selection2
-				descartes : array of string = {"a","e","i","o","u","á","é","í","ó","ú","à","è","ì","ò","ù","ü","A","E","I","O","U","Á","É","Í","Ó","Ú","À","È","Ì","Ò","Ù","Ü"}
-				//eliminando las vocales
-				for var n=0 to (descartes.length-1)
-					pal=pal.replace(descartes[n]," ") // se sustituye con un espacio para que no surja la siguiente situación "kale"-a-e "kl" y despues  
-													  // se pueda confundir k y l con kl 
-				
-				// Eliminando las consonantes
-				for var n=0 to ultimo_de_lista(letrasx)
-					pal=pal.replace(letrasx[n]," ")
-				// Eliminando los espacios en blanco
-				pal=pal.replace(" ","")
-				
-				if pal!="" // es pura puesto que como se ha explicado antes se le han eliminado todas las vocales y las consonantes elegidas
-					// quiere decir que ha usado todo lo que hemos exigido, por lo tanto la palabra pasa el filtro puro.
-					//añade items a la lista2
-					lista_1.insert (out iter2,irudiakx.index_of(selection2));
-					lista_1.set (iter2, 0, selection2);
-					//introduce iteradores en una lista para luego borrarlos
-					iteradores.add(iter)
-				item.next()
-			// borra los iteradores
-			for var i=0 to ultimo_de_lista(iteradores) do lista_2.remove(iteradores[i])
 	
 		
 	def on_ezabatu()
-		var selection = view0.get_selection()
-		selection.set_mode(Gtk.SelectionMode.MULTIPLE)
-		iter : TreeIter
-		if selection.count_selected_rows()>0
-			var item  = selection.get_selected_rows(null).data;
-			var selection2="";
-			var iteradores = new list of Gtk.TreeIter?
-			for var i=0 to (selection.count_selected_rows()-1)
-				// toma iterador y guarda en selection2 su contenido.
-				lista_0.get_iter(out iter, item);
-				lista_0.get(iter, 0, out selection2);
-				//introduce iteradores en una lista para luego borrarlos
-				iteradores.add(iter)
-				item.next()
-			// borra los iteradores
-			for var i=0 to ultimo_de_lista(iteradores) do lista_0.remove(iteradores[i])
-		selection.unselect_all()
+		var lista_letras= new list of string;
+		var lista_seleccionados= new list of string;
+		lista_letras= descarga_lista (lista_0);
+		lista_seleccionados= descarga_seleccionados (view0, lista_0)
+		if (lista_seleccionados.size>0) and (lista_letras.size>0)
+			for var i in lista_seleccionados
+				lista_letras.remove (i)
+			carga_lista (lista_0, lista_letras)
 			
-		
-		
-	def on_zenb1()
-		if int.parse(zenb.get_text())!=0
-			var selection = view2.get_selection()
-			selection.set_mode(Gtk.SelectionMode.MULTIPLE)
-			selection.select_all()
-			iter : TreeIter
-			if (selection.count_selected_rows()-1)>0
-				item:TreePath  = selection.get_selected_rows(null).data;
-				var iteradores = new list of Gtk.TreeIter?
-				iteradores.clear()
-				for var i=0 to (selection.count_selected_rows()-1)
-					var selection2="";
-					// toma iterador y guarda en selection2 su contenido.
-					lista_2.get_iter(out iter, item);
-					lista_2.get(iter, 0, out selection2);
-					if longitud(selection2)==int.parse(zenb.get_text())
-						//añade items a la lista2 ordenadamente segun la lista irudiakx
-						lista_1.insert (out iter2,irudiakx.index_of(selection2));
-						lista_1.set (iter2, 0, selection2);
-						//introduce iteradores en una lista para luego borrarlos
-						iteradores.add(iter)
-					item.next()
 				
-				// borra los iteradores
-				for var i=0 to ultimo_de_lista(iteradores) do lista_2.remove(iteradores[i])
-				selection.unselect_all()
+	def on_iragaz()
+		// Esta función elimina de la lista 1 y añade a la 2 las que tengan letras de la lista de letras.
+		var lista_letras= new list of string;
+		var lista1= new list of string
+		var lista2= new list of string
+		var lista_seleccion= new list of string
+		lista_letras= descarga_lista (lista_0);
+		lista1= descarga_lista (lista_1)
+		lista2= descarga_lista (lista_2)
+		
+		/// seleccionamos las palabras de la lista 1 que tengan las letras.
+		for var i in lista1
+			// procedimiento que trata de eliminar las vocales para que queden solo las consonantes, si eliminando todas las consonantes
+			//y también las vocales palabra queda vacía ="" es que la palabra es correcta puesto que contiene solo las letras seleccionadas.   
+			var pal=i
+			descartes : array of string = {"a","e","i","o","u","á","é","í","ó","ú","à","è","ì","ò","ù","ü","A","E","I","O","U","Á","É","Í","Ó","Ú","À","È","Ì","Ò","Ù","Ü"}
+			//eliminando las vocales
+			for var n=0 to (descartes.length-1)
+				pal=pal.replace(descartes[n]," ") // se sustituye con un espacio para que no surja la siguiente situación "kale"-a-e "kl" y despues  
+												  // se pueda confundir k y l con kl 
+			
+			// Eliminando las consonantes
+			for var n=0 to ultimo_de_lista(lista_letras)
+				pal=pal.replace(lista_letras[n]," ")
+			// Eliminando los espacios en blanco
+			pal=pal.replace(" ","")
+			
+			if pal=="" // es pura puesto que como se ha explicado antes se le han eliminado todas las vocales y las consonantes elegidas
+				// quiere decir que ha usado todo lo que hemos exigido, por lo tanto la palabra pasa el filtro puro.
+				lista_seleccion.add (i);
+		/// ahora en lista_seleccion tenemos las palabras que deseamos pasar de una lista a otra. Procedemos:
+		for var i in lista_seleccion
+			lista2.add(i)
+			lista1.remove(i)
 				
+		lista2.sort (compare_strings)
+		carga_lista(lista_1,lista1);
+		carga_lista(lista_2,lista2);
+		 
+		
+	
+		
 	def on_zenb2()
-		if int.parse(zenb.get_text())!=0
-			var selection = view1.get_selection()
-			selection.set_mode(Gtk.SelectionMode.MULTIPLE)
-			selection.select_all()
-			iter : TreeIter
-			iter2 : TreeIter
-			if (selection.count_selected_rows()-1)>0
+		print "pasa de la lista 1 a la lista 2 las palabras que tengan cierto número de letras."
+		var lista1= new list of string
+		var lista2= new list of string
+		lista1= descarga_lista (lista_1)
+		lista2= descarga_lista (lista_2)
+		var lista_seleccion= new list of string;
 		
-				var item  = selection.get_selected_rows(null).data;
-				var selection2="";
-					
-				var iteradores = new list of Gtk.TreeIter?
-				iteradores.clear()
-				for var i=0 to (selection.count_selected_rows()-1)
-					// toma iterador y guarda en selection2 su contenido.
-					lista_1.get_iter(out iter, item);
-					lista_1.get(iter, 0, out selection2);
-					//añade items a la lista2
-					if longitud(selection2)==int.parse(zenb.get_text())
-						lista_2.insert (out iter2,irudiakx.index_of(selection2));
-						lista_2.set (iter2, 0, selection2);
-					//introduce iteradores en una lista para luego borrarlos
-						iteradores.add(iter)
-					item.next()
-				// borra los iteradores
-				for var i=0 to ultimo_de_lista(iteradores) do lista_1.remove(iteradores[i])
-				selection.unselect_all()
+		if int.parse(zenb.get_text())!=0
+			for var i in lista1
+				if longitud( i )==int.parse(zenb.get_text())
+					//añade items a la lista de selección.
+					lista_seleccion.add (i);
+			
+			for var i in lista_seleccion
+				lista2.add(i)
+				lista1.remove(i)
+				
+			lista2.sort (compare_strings)
+			carga_lista(lista_1,lista1);
+			carga_lista(lista_2,lista2);
+
+	def on_zenb1()
+		print " pasa de la lista 2 a la lista 1 las palabras que tengan cierto número de letras."
+		var lista1= new list of string
+		var lista2= new list of string
+		lista1= descarga_lista (lista_1)
+		lista2= descarga_lista (lista_2)
+		var lista_seleccion= new list of string;
+		
+		if int.parse(zenb.get_text())!=0
+			for var i in lista2
+				if longitud( i )==int.parse(zenb.get_text())
+					//añade items a la lista de selección.
+					lista_seleccion.add (i);
+			
+			for var i in lista_seleccion
+				lista1.add(i)
+				lista2.remove(i)
+				
+			lista1.sort (compare_strings)
+			carga_lista(lista_1,lista1);
+			carga_lista(lista_2,lista2);
+
 			
 	
-	def on_dena2()
-		var selection = view1.get_selection()
-		selection.set_mode(Gtk.SelectionMode.MULTIPLE)
-		selection.select_all()
-		iter : TreeIter
-		iter2 : TreeIter
-		if (selection.count_selected_rows()-1)>0
-			var item  = selection.get_selected_rows(null).data;
-			//var selection1="";
-			var selection2="";
-			var iteradores = new list of Gtk.TreeIter?
-		
-			for var i=0 to (selection.count_selected_rows()-1)
-				// toma iterador y guarda en selection2 su contenido.
-				lista_1.get_iter(out iter, item);
-				lista_1.get(iter, 0, out selection2);
-				//añade items a la lista2
-				lista_2.insert (out iter2,irudiakx.index_of(selection2));
-				lista_2.set (iter2, 0, selection2);
-				//introduce iteradores en una lista para luego borrarlos
-				iteradores.add(iter)
-				item.next()
-			// borra los iteradores
-			for var i=0 to ultimo_de_lista(iteradores) do lista_1.remove(iteradores[i])
-			selection.unselect_all()
-			
+	
 	def on_dena1()
-		var selection = view2.get_selection()
-		selection.set_mode(Gtk.SelectionMode.MULTIPLE)
-		selection.select_all()
-		iter : TreeIter
+		//print " pasa de la lista 2 a la lista 1 todas las palabras."
+		var lista1= new list of string
+		var lista2= new list of string
+		lista1= descarga_lista (lista_1)
+		lista2= descarga_lista (lista_2)
 		
-		if (selection.count_selected_rows()-1)>0
-			item:TreePath  = selection.get_selected_rows(null).data;
-			var iteradores = new list of Gtk.TreeIter?
+		for var i in lista2
+			lista1.add (i);
+		lista2.clear()
+		lista1.sort (compare_strings)
+		carga_lista(lista_1,lista1);
+		carga_lista(lista_2,lista2);
+			
+	def on_dena2()
+		// pasa de la lista 1 a la lista 2 todas las palabras.
+		var lista1= new list of string
+		var lista2= new list of string
+		lista1= descarga_lista (lista_1)
+		lista2= descarga_lista (lista_2)
 		
-			for var i=0 to (selection.count_selected_rows()-1)
-				var selection2="";
-				// toma iterador y guarda en selection2 su contenido.
-				lista_2.get_iter(out iter, item);
-				lista_2.get(iter, 0, out selection2);
-				//añade items a la lista2 ordenadamente segun la lista irudiakx
-				lista_1.insert (out iter2,irudiakx.index_of(selection2));
-				lista_1.set (iter2, 0, selection2);
-				//introduce iteradores en una lista para luego borrarlos
-				iteradores.add(iter)
-				item.next()
-			if ultimo_de_lista(iteradores)>=0
-			
-				// borra los iteradores
-				for var i=0 to ultimo_de_lista(iteradores) do lista_2.remove(iteradores[i])
-			selection.unselect_all()
-				
-			
+		for var i in lista1
+			lista2.add (i);
+		
+		lista1.clear()
+		lista2.sort (compare_strings)
+		carga_lista(lista_1,lista1);
+		carga_lista(lista_2,lista2);
+		
+		
 		
 	def on_haut2()
-		var selection = view1.get_selection()
-		selection.set_mode(Gtk.SelectionMode.MULTIPLE)
-		iter : TreeIter
-		iter2 : TreeIter
-		if selection.count_selected_rows()>0
-
-			var item  = selection.get_selected_rows(null).data;
-				
-			var iteradores = new list of Gtk.TreeIter?
-			for var i=0 to (selection.count_selected_rows()-1)
-				//var selection1="";
-				var selection2="";
-			
-				// toma iterador y guarda en selection2 su contenido.
-				lista_1.get_iter(out iter, item);
-				lista_1.get(iter, 0, out selection2);
-				//añade items a la lista2
-				lista_2.insert (out iter2,irudiakx.index_of(selection2));
-				lista_2.set (iter2, 0, selection2);
-				//introduce iteradores en una lista para luego borrarlos
-				iteradores.add(iter)
-				item.next()
-			// borra los iteradores
-			for var i=0 to ultimo_de_lista(iteradores) do lista_1.remove(iteradores[i])
-			selection.unselect_all()
+		// pasa de la lista 1 a la lista 2 las palabras seleccionadas
+		var lista1= new list of string
+		var lista2= new list of string
+		var lista_seleccionadas= new list of string
+		lista1= descarga_lista (lista_1)
+		lista2= descarga_lista (lista_2)
+		lista_seleccionadas= descarga_seleccionados (view1,lista_1);
+		
+		for var i in lista_seleccionadas
+			//añade items a la lista2
+			lista2.add (i);
+			lista1.remove(i);
+		lista2.sort (compare_strings)
+		carga_lista(lista_1,lista1);
+		carga_lista(lista_2,lista2);
 			
 	def on_haut1()
-		var selection = view2.get_selection()
-		selection.set_mode(Gtk.SelectionMode.MULTIPLE)
-		iter : TreeIter
-		if selection.count_selected_rows()>0
-			var item = selection.get_selected_rows(null).data;
-			var iteradores = new list of Gtk.TreeIter?
-			for var i=0 to (selection.count_selected_rows()-1)
-				var selection2="";
-				// toma iterador y guarda en selection2 su contenido.
-				lista_2.get_iter(out iter, item);
-				lista_2.get(iter, 0, out selection2);
-				//añade items a la lista2 ordenadamente segun la lista irudiakx
-				lista_1.insert (out iter2,irudiakx.index_of(selection2));
-				lista_1.set (iter2, 0, selection2);
-				//introduce iteradores en una lista para luego borrarlos
-				iteradores.add(iter)
-				item.next()
-			if ultimo_de_lista(iteradores)>=0
-				// borra los iteradores
-				for var i=0 to ultimo_de_lista(iteradores) do lista_2.remove(iteradores[i])
-			selection.unselect_all()
+		// pasa de la lista 2 a la lista 1 las palabras seleccionadas
+		var lista1= new list of string
+		var lista2= new list of string
+		var lista_seleccionadas= new list of string
+		lista1= descarga_lista (lista_1)
+		lista2= descarga_lista (lista_2)
+		lista_seleccionadas= descarga_seleccionados (view2,lista_2);
+		
+		for var i in lista_seleccionadas
+			//añade items a la lista2
+			lista1.add (i);
+			lista2.remove(i);
+		lista1.sort (compare_strings)
+		carga_lista(lista_1,lista1);
+		carga_lista(lista_2,lista2);
 			
 	
 	def on_predeterminada()

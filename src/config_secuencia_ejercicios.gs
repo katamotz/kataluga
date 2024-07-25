@@ -41,7 +41,7 @@ class Secuencia_ejercicios:Window
 		sartu: Button= new Button.with_label("-->")
 		sartu.clicked.connect(on_sartu)
 		
-		atera: Button= new Button.with_label("<--")
+		atera: Button= new Button.with_label(" X ")
 		atera.clicked.connect(on_atera)
 		
 		gordeirten: Button= new Button.with_label (t.t("Gorde eta irten"))
@@ -54,7 +54,6 @@ class Secuencia_ejercicios:Window
 		irten.clicked.connect(on_irten)
 		
 		
-
 		
 		var s1 = new Gtk.ScrolledWindow (null,null)
 		s1.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
@@ -87,9 +86,9 @@ class Secuencia_ejercicios:Window
 		fix.put(s2,500,50)
 		fix.put(gordeirten,300,350)
 		fix.put(gorde,200,350)
-		fix.put(irten,450,350)
-		fix.put(sartu,350,150)
-		fix.put(atera,350,200)
+		fix.put(irten,470,350)
+		fix.put(sartu,400,150)
+		fix.put(atera,400,200)
 		this.add(fix)
 		this.set_size_request(800,400)
 		this.show_all()
@@ -138,35 +137,88 @@ class Secuencia_ejercicios:Window
 		
 	def on_letras()
 		pass
+	
+	def descarga_lista (lista:Gtk.ListStore) : Gee.ArrayList
+		// generamos una lista gee a partir de un view para manipularla sencillamente. La manipulamos fuera y luego la cargamos de nuevo.
+		iter: TreeIter;
+		var milista= new list of string;
+		milista.clear();
+		var valor="";
+		if (lista.get_iter_first (out iter))
+			do
+				lista.get (iter, 0, out valor)
+				milista.add (valor)
+			while lista.iter_next (ref iter)
+		return milista
+	
+	def carga_lista (lista:Gtk.ListStore, listaGee:Gee.ArrayList of string)  
+		// metemos nuestra listaGee en una lista.
+		iter: TreeIter;
+		lista.clear()
+		for i in listaGee
+			lista.append (out iter);
+			lista.set (iter, 0, i);
+	
+	def descarga_seleccionados (view: Gtk.TreeView , lista:Gtk.ListStore) : Gee.ArrayList
+		var selection = view.get_selection();
+		model: TreeModel;
+		//selected_paths : Gtk.TreePath []
+		//path: TreePath
+		var milista= new list of string;
+		var selected_paths = selection.get_selected_rows (out model);
 		
+		if (model == null)
+			return milista;
+
+		// Sort the paths in reverse order to avoid invalidating the paths as we remove rows
+		//selected_paths.sort((a, b) => b.compare(a));
+		iter: TreeIter;
+
+		// Remove rows from the ListStore
+		for path in selected_paths
+			if (lista.get_iter(out iter, path))
+				value:string = "";
+				lista.get(iter, 0, out value);
+				//list_store.remove(ref iter);
+				//print("Moved row value: %s\n", value);
+				milista.add (value)
+		
+		return milista;
+		
+	def compare_strings (a:string, b:string) : int 
+		// Comparar primero por la longitud de las cadenas
+		return a.collate(b);
+	
 	def on_sartu()
-		var selection = view1.get_selection()
-		var item  = selection.get_selected_rows(null).data;
-		// revisando que este
-		for var i=0 to (selection.count_selected_rows()-1)
-			var texto_selecto=""
-			// toma iterador y guarda en selection2 su contenido.
-			lista_1.get_iter(out iter1, item);
-			lista_1.get(iter1, 0, out texto_selecto);
-			lista_2.append (out iter2);
-			lista_2.set (iter2, 0, texto_selecto);
-			item.next()
-			
-	def on_atera()
-		var selection = view2.get_selection()
-		// revisando que este
-		if selection.count_selected_rows()>0
-			var item  = selection.get_selected_rows(null).data;
-			var iteradores= new list of Gtk.TreeIter?
-			for var i=0 to (selection.count_selected_rows()-1)
-				// toma iterador y guarda en selection2 su contenido.
-				lista_2.get_iter(out iter2, item);
-				iteradores.add(iter2)
-				item.next()
-			// borra los iteradores
-			var i=ultimo_de_lista(iteradores)
-			while i>=0
-				lista_2.remove(iteradores[i])
-				i--
+		// pasa de la lista 1 a la lista 2 las palabras seleccionadas
+		var lista1= new list of string
+		var lista2= new list of string
+		var lista_seleccionadas= new list of string
+		lista1= descarga_lista (lista_1)
+		lista2= descarga_lista (lista_2)
+		lista_seleccionadas= descarga_seleccionados (view1,lista_1);
 		
+		for var i in lista_seleccionadas
+			//añade items a la lista2
+			lista2.add (i);
+				
+		lista2.sort (compare_strings)
+		carga_lista(lista_1,lista1);
+		carga_lista(lista_2,lista2);
+		
+	def on_atera()
+		var lista1= new list of string
+		var lista2= new list of string
+		var lista_seleccionadas= new list of string
+		lista1= descarga_lista (lista_1)
+		lista2= descarga_lista (lista_2)
+		lista_seleccionadas= descarga_seleccionados (view2,lista_2);
+		
+		for var i in lista_seleccionadas
+			//borra items a la lista2
+			lista2.remove(i);
+			
+		lista1.sort (compare_strings)
+		carga_lista(lista_1,lista1);
+		carga_lista(lista_2,lista2);
 		
